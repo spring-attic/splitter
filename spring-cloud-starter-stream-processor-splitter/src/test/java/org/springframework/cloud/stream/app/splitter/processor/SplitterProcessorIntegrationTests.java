@@ -16,17 +16,20 @@
 
 package org.springframework.cloud.stream.app.splitter.processor;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
 import org.hamcrest.Description;
 import org.hamcrest.DiagnosingMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.cloud.stream.annotation.Bindings;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.cloud.stream.test.binder.MessageCollector;
 import org.springframework.integration.IntegrationMessageHeaderAccessor;
@@ -43,13 +46,13 @@ import org.springframework.messaging.support.GenericMessage;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 import static org.springframework.cloud.stream.test.matcher.MessageQueueMatcher.receivesPayloadThat;
 import static org.springframework.integration.test.matcher.HeaderMatcher.hasSequenceNumber;
 import static org.springframework.integration.test.matcher.HeaderMatcher.hasSequenceSize;
@@ -62,12 +65,11 @@ import static org.springframework.integration.test.matcher.PayloadMatcher.hasPay
  * @author Artem Bilan
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = SplitterProcessorIntegrationTests.SplitterProcessorApplication.class)
+@SpringBootTest(classes = SplitterProcessorIntegrationTests.SplitterProcessorApplication.class)
 @DirtiesContext
 public abstract class SplitterProcessorIntegrationTests {
 
 	@Autowired
-	@Bindings(SplitterProcessorConfiguration.class)
 	protected Processor channels;
 
 	@Autowired
@@ -95,7 +97,7 @@ public abstract class SplitterProcessorIntegrationTests {
 		}
 	}
 
-	@IntegrationTest("splitter.delimiters = ,")
+	@SpringBootTest("splitter.delimiters = ,")
 	public static class WithDelimitersTests extends SplitterProcessorIntegrationTests {
 
 		@Test
@@ -108,7 +110,7 @@ public abstract class SplitterProcessorIntegrationTests {
 		}
 	}
 
-	@IntegrationTest({ "splitter.fileMarkers = false", "splitter.charset = UTF-8", "splitter.applySequence = false" })
+	@SpringBootTest({ "splitter.fileMarkers = false", "splitter.charset = UTF-8", "splitter.applySequence = false" })
 	public static class FromFileTests extends SplitterProcessorIntegrationTests {
 
 		@Test
@@ -129,7 +131,7 @@ public abstract class SplitterProcessorIntegrationTests {
 		}
 	}
 
-	@IntegrationTest({ "splitter.fileMarkers = true", "splitter.charset = UTF-8", "splitter.markersJson = false" })
+	@SpringBootTest({ "splitter.fileMarkers = true", "splitter.charset = UTF-8", "splitter.markersJson = false" })
 	public static class FromFileWithMarkersTests extends SplitterProcessorIntegrationTests {
 
 		@Test
@@ -156,7 +158,7 @@ public abstract class SplitterProcessorIntegrationTests {
 		}
 	}
 
-	@IntegrationTest("splitter.expression=payload.split(',')")
+	@SpringBootTest("splitter.expression=payload.split(',')")
 	public static class UsingExpressionIntegrationTests extends SplitterProcessorIntegrationTests {
 
 		@Test
