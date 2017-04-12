@@ -20,6 +20,7 @@ import javax.validation.constraints.AssertTrue;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.expression.Expression;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Configuration properties for the Splitter Processor app.
@@ -28,6 +29,7 @@ import org.springframework.expression.Expression;
  * @author Artem Bilan
  */
 @ConfigurationProperties("splitter")
+@Validated
 public class SplitterProcessorProperties {
 
 	/**
