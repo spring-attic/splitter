@@ -3,6 +3,27 @@ tag::ref-doc[]
 The splitter app builds upon the concept of the same name in Spring Integration and allows the splitting of a single
 message into several distinct messages.
 
+== Input
+
+=== Headers
+
+N/A
+
+=== Payload
+
+* Any
+
+== Output
+
+=== Headers
+
+N/A
+
+=== Payload
+
+* A collection of split messages based on a given expression, delimiter or file marker. 
+
+
 == Options
 //tag::configuration-properties[]
 $$splitter.apply-sequence$$:: $$Add correlation/sequence information in headers to facilitate later
@@ -78,8 +99,22 @@ and an expression `#jsonPath(payload, '$.store.book')`; the result will be 4 mes
 containing the properties of a single book.
 
 //end::ref-doc[]
-== Building with Maven
+== Build
 
 ```
-$> mvn package
+$ ./mvnw clean install -PgenerateApps
+$ cd apps
 ```
+You can find the corresponding binder based projects here.
+You can then cd into one of the folders and build it:
+```
+$ ./mvnw clean package
+```
+
+== Examples
+
+```
+java -jar splitter-processor.jar --splitter.expression=expression
+java -jar splitter-processor.jar --splitter.delimiters=delimiters
+```
+
