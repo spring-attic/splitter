@@ -1,4 +1,4 @@
-tag::ref-doc[]
+//tag::ref-doc[]
 
 = Splitter Processor
 
