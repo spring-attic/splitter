@@ -1,5 +1,6 @@
 tag::ref-doc[]
 = Splitter Processor
+
 The splitter app builds upon the concept of the same name in Spring Integration and allows the splitting of a single
 message into several distinct messages.
 
@@ -98,7 +99,6 @@ For example, consider the following JSON:
 and an expression `#jsonPath(payload, '$.store.book')`; the result will be 4 messages, each with a `Map` payload
 containing the properties of a single book.
 
-//end::ref-doc[]
 == Build
 
 ```
@@ -117,4 +117,4 @@ $ ./mvnw clean package
 java -jar splitter-processor.jar --splitter.expression=expression
 java -jar splitter-processor.jar --splitter.delimiters=delimiters
 ```
-
+//end::ref-doc[]
