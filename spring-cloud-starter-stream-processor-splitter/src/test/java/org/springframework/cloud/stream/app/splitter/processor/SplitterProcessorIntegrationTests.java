@@ -63,6 +63,7 @@ import static org.springframework.integration.test.matcher.PayloadMatcher.hasPay
  *
  * @author Gary Russell
  * @author Artem Bilan
+ * @author Soby Chacko
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = SplitterProcessorIntegrationTests.SplitterProcessorApplication.class)
@@ -110,7 +111,7 @@ public abstract class SplitterProcessorIntegrationTests {
 		}
 	}
 
-	@SpringBootTest({ "splitter.fileMarkers = false", "splitter.charset = UTF-8", "splitter.applySequence = false" })
+	@SpringBootTest({"splitter.fileMarkers = false", "splitter.charset = UTF-8", "splitter.applySequence = false"})
 	public static class FromFileTests extends SplitterProcessorIntegrationTests {
 
 		@Test
@@ -131,7 +132,10 @@ public abstract class SplitterProcessorIntegrationTests {
 		}
 	}
 
-	@SpringBootTest({ "splitter.fileMarkers = true", "splitter.charset = UTF-8", "splitter.markersJson = false" })
+	@SpringBootTest({"splitter.fileMarkers = true",
+			"splitter.charset = UTF-8",
+			"splitter.markersJson = false",
+			"spring.cloud.stream.bindings.input.content-type = application/x-java-serialized-object"})
 	public static class FromFileWithMarkersTests extends SplitterProcessorIntegrationTests {
 
 		@Test
@@ -153,7 +157,7 @@ public abstract class SplitterProcessorIntegrationTests {
 			assertThat(this.collector.forChannel(this.channels.output()),
 					receivesPayloadThat(allOf(
 							instanceOf(FileMarker.class),
-				 			hasMark(Mark.END))));
+							hasMark(Mark.END))));
 			file.delete();
 		}
 	}
