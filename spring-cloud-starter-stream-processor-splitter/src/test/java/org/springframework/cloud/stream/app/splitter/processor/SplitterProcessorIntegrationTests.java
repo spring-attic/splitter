@@ -77,6 +77,7 @@ public abstract class SplitterProcessorIntegrationTests {
 	protected MessageCollector collector;
 
 	@Autowired
+	@Qualifier("splitterHandler")
 	protected AbstractMessageSplitter splitter;
 
 	@Autowired
