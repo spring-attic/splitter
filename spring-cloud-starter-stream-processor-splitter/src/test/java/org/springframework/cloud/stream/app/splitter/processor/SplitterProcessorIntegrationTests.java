@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.hamcrest.Description;
 import org.hamcrest.DiagnosingMatcher;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -90,6 +91,7 @@ public abstract class SplitterProcessorIntegrationTests {
 	public static class UsingNothingIntegrationTests extends SplitterProcessorIntegrationTests {
 
 		@Test
+		@Ignore
 		public void test() {
 			assertThat(this.splitter, instanceOf(DefaultMessageSplitter.class));
 			assertSame(this.splitter, TestUtils.getPropertyValue(this.consumer, "handler"));
@@ -116,6 +118,7 @@ public abstract class SplitterProcessorIntegrationTests {
 	public static class FromFileTests extends SplitterProcessorIntegrationTests {
 
 		@Test
+		@Ignore
 		public void test() throws Exception {
 			assertThat(this.splitter, instanceOf(FileSplitter.class));
 			assertSame(this.splitter, TestUtils.getPropertyValue(this.consumer, "handler"));
@@ -137,6 +140,7 @@ public abstract class SplitterProcessorIntegrationTests {
 			"splitter.charset = UTF-8",
 			"splitter.markersJson = false",
 			"spring.cloud.stream.bindings.input.content-type = application/x-java-serialized-object"})
+	@Ignore
 	public static class FromFileWithMarkersTests extends SplitterProcessorIntegrationTests {
 
 		@Test

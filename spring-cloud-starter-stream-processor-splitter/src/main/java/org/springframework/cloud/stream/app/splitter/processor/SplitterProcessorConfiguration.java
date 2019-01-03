@@ -22,15 +22,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.stream.annotation.Bindings;
 import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Processor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.expression.Expression;
 import org.springframework.integration.annotation.Splitter;
+import org.springframework.integration.annotation.Transformer;
 import org.springframework.integration.config.AbstractSimpleMessageHandlerFactoryBean;
 import org.springframework.integration.file.splitter.FileSplitter;
 import org.springframework.integration.splitter.AbstractMessageSplitter;
 import org.springframework.integration.splitter.DefaultMessageSplitter;
 import org.springframework.integration.splitter.ExpressionEvaluatingSplitter;
+import org.springframework.messaging.handler.annotation.SendTo;
 
 /**
  * A Processor app that splits messages into component parts. Messages with
@@ -50,8 +53,14 @@ public class SplitterProcessorConfiguration {
 	@Bindings(SplitterProcessorConfiguration.class)
 	private Processor channels;
 
+	@StreamListener(Processor.INPUT)
+	@SendTo("splittingChannel")
+	public Object transformInput(String input) {
+		return input;
+	}
+
 	@Bean
-	@Splitter(inputChannel = Processor.INPUT)
+	@Splitter(inputChannel = "splittingChannel")
 	public AbstractSimpleMessageHandlerFactoryBean<AbstractMessageSplitter> splitterHandler(
 			final SplitterProcessorProperties properties) {
 		return new AbstractSimpleMessageHandlerFactoryBean<AbstractMessageSplitter>() {
